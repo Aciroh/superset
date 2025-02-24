@@ -71,8 +71,12 @@ services:
     ports:
       - 8088:8088
     depends_on: *superset-depends-on
-    volumes: *superset-volumes
-
+    volumes: 
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+      - ./docker/superset_config.py:/app/superset_config.py
+    environment:
+      SUPERSET_CONFIG_PATH: /app/superset_config.py
   superset-init:
     container_name: superset_init
     build:
@@ -85,7 +89,10 @@ services:
         required: false
     depends_on: *superset-depends-on
     user: "root"
-    volumes: *superset-volumes
+    volumes: 
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+      - ./docker/superset_config.py:/app/superset_config.py
     healthcheck:
       disable: true
 
@@ -102,7 +109,10 @@ services:
     restart: unless-stopped
     depends_on: *superset-depends-on
     user: "root"
-    volumes: *superset-volumes
+    volumes: 
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+      - ./docker/superset_config.py:/app/superset_config.py
     healthcheck:
       test:
         [
@@ -117,13 +127,16 @@ services:
     command: ["/app/docker/docker-bootstrap.sh", "beat"]
     env_file:
       - path: docker/.env # default
-        required: true
+        # required: true§§§§≥≥≥˚˚˚¬¬¬
       - path: docker/.env-local # optional override
         required: false
     restart: unless-stopped
     depends_on: *superset-depends-on
     user: "root"
-    volumes: *superset-volumes
+    volumes: 
+      - ./docker:/app/docker
+      - superset_home:/app/superset_home
+      - ./docker/superset_config.py:/app/superset_config.py
     healthcheck:
       disable: true
 
